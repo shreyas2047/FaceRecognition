@@ -6,6 +6,7 @@ import Logo from './components/Logo/Logo';
 import Rank from './components/Rank/Rank';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
 import './App.css';
 
 const app = new Clarifai.App({
@@ -32,6 +33,7 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
+      route: 'signin'
     }
   }
 
@@ -68,22 +70,30 @@ class App extends Component {
       .catch(err=> console.log(err));
   }
 
+  onRouteChange = (route)=> {
+    this.setState({route: route});
+  }
+
   render() {
     return (
       <div className="App">
         <Particles className= "particles"
               params={particlesOptions}
         />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonSubmit={this.onButtonSubmit} />
-        <FaceRecognition
-         imageUrl={this.state.imageUrl}
-         box = {this.state.box} />
-
+        <Navigation onRouteChange={this.onRouteChange} />
+        { this.state.route === 'signin'
+          ?<Signin onRouteChange={this.onRouteChange} />
+          : <div>
+              <Logo />
+              <Rank />
+              <ImageLinkForm
+                onInputChange={this.onInputChange}
+                onButtonSubmit={this.onButtonSubmit} />
+              <FaceRecognition
+              imageUrl={this.state.imageUrl}
+              box = {this.state.box} />
+            </div>
+        }
       </div>
     );
   }
